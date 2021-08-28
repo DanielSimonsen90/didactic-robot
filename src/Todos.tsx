@@ -1,86 +1,43 @@
-import { Component } from "react";
+import { useState, FormEvent } from "react";
+import TodoForm from "./TodoForm";
+import TodoClass from './models/Todo'
+import Todo from './Todo'
 
-export default class Todos extends Component {
-  state = {
-    newTodo: "",
-    todos: ["hello there", "general kenobi"],
-  };
+export default function Todos() {
+  const todosFromStorage = localStorage.getItem('todos');
+  const [todos, setTodos] = useState<Array<TodoClass>>((todosFromStorage && JSON.parse(todosFromStorage)) || new Array<TodoClass>());
 
-  onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  function onSubmit(e: FormEvent<HTMLFormElement>, todoItem: TodoClass) {
     e.preventDefault();
-    if (!this.state.newTodo) return;
+    if (!todoItem) return;
 
-    const todos = [this.state.newTodo, ...this.state.todos];
-    this.setState({ newTodo: "", todos });
+    setTodos([...todos, todoItem]);
   };
 
-  removeTodo = (removeIndex: number) => {
-    const todos = this.state.todos.filter((_, index) => index !== removeIndex);
-    this.setState({ todos });
-  };
+  const updateTodo = (index: number, update: TodoClass) => setTodos(todos => {
+    todos[index] = update;
+    localStorage.setItem('todos', JSON.stringify(todos));    
+    return todos;
+  })
+  const removeTodo = (removeIndex: number) => setTodos(todos.filter((_, i) => i !== removeIndex));
 
-  render() {
-    return (
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          width: 500,
-          margin: "0 auto",
-          padding: 8,
-        }}
-      >
-        <h2 style={{ textAlign: "center" }}>Todo</h2>
-        <form
-          onSubmit={this.onSubmit}
-          style={{ display: "flex", marginBottom: 8 }}
-        >
-          <input
-            type="text"
-            name="newTodo"
-            id="newTodo"
-            value={this.state.newTodo}
-            onChange={(e) => this.setState({ newTodo: e.target.value })}
-            placeholder="Fix the thing.."
-            style={{
-              display: "inline-flex",
-              flex: 1,
-              padding: 4,
-              border: "1px solid #eaeaea",
-              marginRight: 4,
-            }}
-          />
-          <button
-            type="submit"
-            style={{ borderColor: "#eaeaea", backgroundColor: "#fff" }}
-          >
-            Add
-          </button>
-        </form>
+  return (
+    <div style={{
+        display: "flex",
+        flexDirection: "column",
+        width: 500,
+        margin: "0 auto",
+        padding: 8,
+      }}
+    >
+      <h2 style={{ textAlign: "center" }}>Todo</h2>
+      <TodoForm onSubmit={onSubmit} />
+      {todos.length && (
         <div>
-          {this.state.todos.length === 0 && (
             <div style={{ textAlign: "center" }}>Add some todos</div>
-          )}
-          {this.state.todos.map((todo, i) => (
-            <div
-              key={`${todo}-${i}`}
-              style={{
-                padding: 4,
-                borderBottom: "1px solid #ccc",
-                display: "flex",
-              }}
-            >
-              <span style={{ flex: 1 }}>{todo}</span>
-              <span
-                style={{ cursor: "pointer" }}
-                onClick={() => this.removeTodo(i)}
-              >
-                &times;
-              </span>
-            </div>
-          ))}
+            {todos.map((todo, i) => <Todo key={i} index={i} value={todo} updateTodo={updateTodo} removeTodo={removeTodo} />)}
         </div>
-      </div>
-    );
-  }
+      )}
+    </div>
+  );
 }
