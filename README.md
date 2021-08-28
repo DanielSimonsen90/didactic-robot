@@ -52,13 +52,13 @@ Simply converted from top to bottom, only modifying a tiny bit of the class comp
 The task took **3 minutes, 37 seconds**
 
 ### Task 2: Add statuses to the items in the list: "Todo", "Doing", "Done". It should be possible to move the items through these statuses and see clearly which status each item is in
-I began making my new class and type in a `src/models` folder. Using some smart property initialization in my class, made the process a lot faster, so I didn't need to work too much on defining my models.
-I then quickly began cutting the whole <form> element from the Todos.tsx into a new file, TodoForm.tsx.
-Moving everything over was easy, and all there really was left for me to do, was to implement a new input field that had a list of the status types I defined in `./models/StatusTypes.ts`, was making a datalist with options mapped by a TodoStatus[].
-When submitting from my TodoForm.tsx, I used the Todo.tsx' `onSubmit` function which I passed as a prop - however I had added a new parameter, being a new instance of my Todo class, containing the title provided by #newTodo, and a status provided from my new datalist.
+I began making my new class and type in a [src/models](https://github.com/DanielSimonsen90/didactic-robot/tree/master/src/models) folder. Using some smart property initialization in my class, made the process a lot faster, so I didn't need to work too much on defining my models.
+I then quickly began cutting the whole <form> element from the Todos.tsx into a new file, [TodoForm.tsx](https://github.com/DanielSimonsen90/didactic-robot/blob/master/src/TodoForm.tsx).
+Moving everything over was easy, and all there really was left for me to do, was to implement a new input field that had a list of the status types I defined in [src/models/StatusTypes.ts](https://github.com/DanielSimonsen90/didactic-robot/blob/master/src/models/TodoStatus.ts), was making a datalist with options mapped by a TodoStatus[].
+When submitting from my TodoForm.tsx, I used the Todos.tsx' [onSubmit](https://github.com/DanielSimonsen90/didactic-robot/blob/5229a2e81f05f708378f3390692157f9676faf6e/src/Todos.tsx#L10) function which I passed as a prop - however I had added a new parameter, being a new instance of my Todo class, containing the title provided by #newTodo, and a status provided from my new datalist.
 
 However, when viewing the saved todos, you should also be able to edit the current status from "Todo" to "Doing", and finally, "Done". As I did in my TodoForm.tsx, I added the same input/datalist logic, but quickly came to notice that I couldn't edit the status in the object, because the input value was different from the new object I created with the updated values.
-After a bit of thinking, I decided to create a Todo.tsx, that took the index, todoItem, a new updateTodo function, and removeTodo as its props. Then I could separate the status property and put it in its own state, so I then easily could cause the re-render and the modification I was needing. I also implemented a useEffect, so each time the component is re-rendered, it updates the initial todos array from Todos.tsx using the updateTodo prop.
+After a bit of thinking, I decided to create a [Todo.tsx](https://github.com/DanielSimonsen90/didactic-robot/blob/master/src/Todo.tsx), that took the index, todoItem, a new updateTodo function, and removeTodo as its props. Then I could separate the status property and put it in its own state, so I then easily could cause the re-render and the modification I was needing. I also implemented a useEffect, so each time the component is re-rendered, it updates the initial todos array from Todos.tsx using the updateTodo prop.
 
 The task took **31 minutes, 20 seconds**
 
@@ -75,3 +75,5 @@ To add onto the case to make sense and be a bit cleaner, I decided to start off 
 For the Todos case to make sense, it should save the todos, so they aren't lost on refresh. I used localStorage as a solution to this.
 
 The tasks took **14 minutes, 57 seconds**
+
+## Total time with bonus task: 1 hour, 13 minutes & 44 seconds
